@@ -155,7 +155,7 @@ function hook_libart() {
                 for (var i = 0; i < method_count; i++) {
                     var name_ptr = Memory.readPointer(methods_ptr.add(i*12));
                     var sig_ptr = Memory.readPointer(methods_ptr.add(i*12 + 4));
-                    var fnPtr_ptr = Memory.readPointer(methods_ptr.add(i*12 + 4));
+                    var fnPtr_ptr = Memory.readPointer(methods_ptr.add(i*12 + 8));
 
                     var name = Memory.readCString(name_ptr);
                     var sig  = Memory.readCString(sig_ptr);
