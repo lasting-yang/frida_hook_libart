@@ -13,6 +13,7 @@ function hook_libart() {
     var addrGetStaticMethodID = undefined;
     var addrGetFieldID = undefined;
     var addrGetStaticFieldID = undefined;
+    var addrRegisterNativeMethods = undefined;
     for (i = 0; i < symbols.length; i++) {
         var symbol = symbols[i];
         if (symbol.name == "_ZN3art3JNI17GetStringUTFCharsEP7_JNIEnvP8_jstringPh") {
@@ -36,6 +37,9 @@ function hook_libart() {
         } else if (symbol.name == "_ZN3art3JNI16GetStaticFieldIDEP7_JNIEnvP7_jclassPKcS6_") {
             addrGetStaticFieldID = symbol.address;
             console.log("GetStaticFieldID is at " + addrGetStaticFieldID);
+        } else if (symbol.name == "_ZN3art3JNI21RegisterNativeMethodsEP7_JNIEnvP7_jclassPK15JNINativeMethodib") {
+            addrRegisterNativeMethods = symbol.address;
+            console.log("RegisterNativeMethods is at " + addrRegisterNativeMethods);
         }
     }
 
@@ -141,6 +145,28 @@ function hook_libart() {
         });
     }
     
+    if (addrRegisterNativeMethods != undefined) {
+        Interceptor.attach(addrRegisterNativeMethods, {
+            onEnter: function(args) {
+                console.log("[RegisterNativeMethods] method_count:", args[3]);
+                var methods_ptr = ptr(args[2]);
+
+                var method_count = parseInt(args[3]);
+                for (var i = 0; i < method_count; i++) {
+                    var name_ptr = Memory.readPointer(methods_ptr.add(i*12));
+                    var sig_ptr = Memory.readPointer(methods_ptr.add(i*12 + 4));
+                    var fnPtr_ptr = Memory.readPointer(methods_ptr.add(i*12 + 4));
+
+                    var name = Memory.readCString(name_ptr);
+                    var sig  = Memory.readCString(sig_ptr);
+                    console.log("[RegisterNativeMethods] name:", name, "sig", sig, "fnPtr", fnPtr_ptr);
+
+                }
+            },
+            onLeave: function(retval) {}
+        });
+    }
+
     ishook_libart = true;
 }
 
