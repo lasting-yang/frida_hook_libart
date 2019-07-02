@@ -13,7 +13,7 @@ function hook_libart() {
     var addrGetStaticMethodID = undefined;
     var addrGetFieldID = undefined;
     var addrGetStaticFieldID = undefined;
-    var addrRegisterNativeMethods = undefined;
+    var addrRegisterNatives = undefined;
     for (i = 0; i < symbols.length; i++) {
         var symbol = symbols[i];
         if (symbol.name == "_ZN3art3JNI17GetStringUTFCharsEP7_JNIEnvP8_jstringPh") {
@@ -37,9 +37,9 @@ function hook_libart() {
         } else if (symbol.name == "_ZN3art3JNI16GetStaticFieldIDEP7_JNIEnvP7_jclassPKcS6_") {
             addrGetStaticFieldID = symbol.address;
             console.log("GetStaticFieldID is at " + addrGetStaticFieldID);
-        } else if (symbol.name == "_ZN3art3JNI21RegisterNativeMethodsEP7_JNIEnvP7_jclassPK15JNINativeMethodib") {
-            addrRegisterNativeMethods = symbol.address;
-            console.log("RegisterNativeMethods is at " + addrRegisterNativeMethods);
+        } else if (symbol.name == "_ZN3art3JNI15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi") {
+            addrRegisterNatives = symbol.address;
+            console.log("RegisterNatives is at " + addrRegisterNatives);
         }
     }
 
@@ -145,10 +145,10 @@ function hook_libart() {
         });
     }
     
-    if (addrRegisterNativeMethods != undefined) {
-        Interceptor.attach(addrRegisterNativeMethods, {
+    if (addrRegisterNatives != undefined) {
+        Interceptor.attach(addrRegisterNatives, {
             onEnter: function(args) {
-                console.log("[RegisterNativeMethods] method_count:", args[3]);
+                console.log("[RegisterNatives] method_count:", args[3]);
                 var methods_ptr = ptr(args[2]);
 
                 var method_count = parseInt(args[3]);
@@ -159,7 +159,7 @@ function hook_libart() {
 
                     var name = Memory.readCString(name_ptr);
                     var sig  = Memory.readCString(sig_ptr);
-                    console.log("[RegisterNativeMethods] name:", name, "sig", sig, "fnPtr", fnPtr_ptr);
+                    console.log("[RegisterNatives] name:", name, "sig", sig, "fnPtr", fnPtr_ptr);
 
                 }
             },
@@ -194,4 +194,7 @@ hook_libart();
 
 .text:002889B0 ; art::JNI::GetStaticFieldID(_JNIEnv *, _jclass *, char const*, char const*)
 .text:002889B0 _ZN3art3JNI16GetStaticFieldIDEP7_JNIEnvP7_jclassPKcS6_
+
+.text:002B14E8 ; art::JNI::RegisterNatives(_JNIEnv *, _jclass *, JNINativeMethod const*, int)
+.text:002B14E8 _ZN3art3JNI15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi
 */
