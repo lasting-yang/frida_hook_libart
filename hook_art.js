@@ -159,7 +159,8 @@ function hook_libart() {
 
                     var name = Memory.readCString(name_ptr);
                     var sig  = Memory.readCString(sig_ptr);
-                    console.log("[RegisterNatives] name:", name, "sig", sig, "fnPtr", fnPtr_ptr);
+                    var find_module = Process.findModuleByAddress(fnPtr_ptr);
+                    console.log("[RegisterNatives] name:", name, "sig:", sig, "fnPtr:", fnPtr_ptr, "module_name:", find_module.name, "module_base:", find_module.base);
 
                 }
             },
