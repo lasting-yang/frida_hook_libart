@@ -14,7 +14,7 @@ function hook_libart() {
     var addrGetFieldID = undefined;
     var addrGetStaticFieldID = undefined;
     var addrRegisterNatives = undefined;
-    for (i = 0; i < symbols.length; i++) {
+    for (var i = 0; i < symbols.length; i++) {
         var symbol = symbols[i];
         if (symbol.name == "_ZN3art3JNI17GetStringUTFCharsEP7_JNIEnvP8_jstringPh") {
             addrGetStringUTFChars = symbol.address;
