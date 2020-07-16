@@ -15,14 +15,40 @@ frida -U --no-pause -f package_name -l hook_RegisterNatives.js
 ### 2.1 show RegisterNatives
 
 ```text
-only test android8.1.0(arm64), android9(arm64)
-```
-
-```text
-[RegisterNatives] method_count: 0x6
-[RegisterNatives] java_class: org.chromium.base.CommandLine name: nativeInit sig: ([Ljava/lang/String;)V fnPtr: 0xd44c4349 module_name: libcronet.76.0.3809.21.so module_base: 0xd4394000 offset: 0x130349
-[RegisterNatives] java_class: org.chromium.base.CommandLine name: nativeHasSwitch sig: (Ljava/lang/String;)Z fnPtr: 0xd44c4369 module_name: libcronet.76.0.3809.21.so module_base: 0xd4394000 offset: 0x130369
-[RegisterNatives] java_class: org.chromium.base.CommandLine name: nativeGetSwitchValue sig: (Ljava/lang/String;)Ljava/lang/String; fnPtr: 0xd44c43bd module_name: libcronet.76.0.3809.21.so module_base: 0xd4394000 offset: 0x1303bd
+[RegisterNatives] method_count: 0x1
+[RegisterNatives] java_class: com.facebook.react.bridge.ProxyJavaScriptExecutor name: initHybrid sig: (Lcom/facebook/react/bridge/JavaJSExecutor;)Lcom/facebook/jni/HybridData; fnPtr: 0x9ca00b61 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6fb61
+[RegisterNatives] method_count: 0xe
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: initHybrid sig: ()Lcom/facebook/jni/HybridData; fnPtr: 0x9c9e1c65 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x50c65
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: initializeBridge sig: (Lcom/facebook/react/bridge/ReactCallback;Lcom/facebook/react/bridge/JavaScriptExecutor;Lcom/facebook/react/bridge/queue/MessageQueueThread;Lcom/facebook/react/bridge/queue/MessageQueueThread;Ljava/util/Collection;Ljava/util/Collection;)V fnPtr: 0x9c9e2401 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x51401
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniExtendNativeModules sig: (Ljava/util/Collection;Ljava/util/Collection;)V fnPtr: 0x9c9e2f11 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x51f11
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniSetSourceURL sig: (Ljava/lang/String;)V fnPtr: 0x9c9e3171 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x52171
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniRegisterSegment sig: (ILjava/lang/String;)V fnPtr: 0x9c9e3445 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x52445
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniLoadScriptFromAssets sig: (Landroid/content/res/AssetManager;Ljava/lang/String;Z)V fnPtr: 0x9c9e3801 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x52801
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniLoadScriptFromFile sig: (Ljava/lang/String;Ljava/lang/String;Z)V fnPtr: 0x9c9e3b35 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x52b35
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniLoadScriptFromDeltaBundle sig: (Ljava/lang/String;Lcom/facebook/react/bridge/NativeDeltaClient;Z)V fnPtr: 0x9c9e3f61 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x52f61
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniCallJSFunction sig: (Ljava/lang/String;Ljava/lang/String;Lcom/facebook/react/bridge/NativeArray;)V fnPtr: 0x9c9e438d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x5338d
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniCallJSCallback sig: (ILcom/facebook/react/bridge/NativeArray;)V fnPtr: 0x9c9e4c45 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x53c45
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: setGlobalVariable sig: (Ljava/lang/String;Ljava/lang/String;)V fnPtr: 0x9c9e4f01 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x53f01
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: getJavaScriptContext sig: ()J fnPtr: 0x9c9e509d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x5409d
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: getJSCallInvokerHolder sig: ()Lcom/facebook/react/turbomodule/core/JSCallInvokerHolderImpl; fnPtr: 0x9c9e519d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x5419d
+[RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniHandleMemoryPressure sig: (I)V fnPtr: 0x9c9e539d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x5439d
+[RegisterNatives] method_count: 0x1
+[RegisterNatives] java_class: com.facebook.react.bridge.queue.NativeRunnable name: run sig: ()V fnPtr: 0x9c9e0935 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x4f935
+[RegisterNatives] method_count: 0x1
+[RegisterNatives] java_class: com.facebook.react.bridge.CxxModuleWrapperBase name: getName sig: ()Ljava/lang/String; fnPtr: 0x9ca00e49 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6fe49
+[RegisterNatives] method_count: 0x1
+[RegisterNatives] java_class: com.facebook.react.bridge.CxxModuleWrapper name: makeDsoNative sig: (Ljava/lang/String;Ljava/lang/String;)Lcom/facebook/react/bridge/CxxModuleWrapper; fnPtr: 0x9ca010f9 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x700f9
+[RegisterNatives] method_count: 0x1
+[RegisterNatives] java_class: com.facebook.react.bridge.CxxCallbackImpl name: nativeInvoke sig: (Lcom/facebook/react/bridge/NativeArray;)V fnPtr: 0x9ca013bd module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x703bd
+[RegisterNatives] method_count: 0x1
+[RegisterNatives] java_class: com.facebook.react.bridge.NativeArray name: toString sig: ()Ljava/lang/String; fnPtr: 0x9c9fec1d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6dc1d
+[RegisterNatives] method_count: 0x3
+[RegisterNatives] java_class: com.facebook.react.bridge.NativeDeltaClient name: initHybrid sig: ()Lcom/facebook/jni/HybridData; fnPtr: 0x9c9ffcfd module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6ecfd
+[RegisterNatives] java_class: com.facebook.react.bridge.NativeDeltaClient name: processDelta sig: (Ljava/nio/channels/ReadableByteChannel;)V fnPtr: 0x9c9ffeed module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6eeed
+[RegisterNatives] java_class: com.facebook.react.bridge.NativeDeltaClient name: reset sig: ()V fnPtr: 0x9c9fffc5 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6efc5
+[RegisterNatives] method_count: 0x2
+[RegisterNatives] java_class: com.facebook.react.bridge.ReadableNativeArray name: importArray sig: ()[Ljava/lang/Object; fnPtr: 0x9ca03641 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x72641
+[RegisterNatives] java_class: com.facebook.react.bridge.ReadableNativeArray name: importTypeArray sig: ()[Ljava/lang/Object; fnPtr: 0x9ca03b01 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x72b01
 ```
 
 ## 3 hook_artmethod
