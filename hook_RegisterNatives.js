@@ -1,16 +1,15 @@
 
-function hook_libart() {
+function hook_RegisterNatives() {
     var symbols = Module.enumerateSymbolsSync("libart.so");
     var addrRegisterNatives = null;
     for (var i = 0; i < symbols.length; i++) {
         var symbol = symbols[i];
-        var symbol_name = symbol.name;
         
         //_ZN3art3JNI15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi
-        if (symbol_name.indexOf("art") >= 0 &&
-                symbol_name.indexOf("JNI") >= 0 && 
-                symbol_name.indexOf("RegisterNatives") >= 0 && 
-                symbol_name.indexOf("CheckJNI") < 0) {
+        if (symbol.name.indexOf("art") >= 0 &&
+                symbol.name.indexOf("JNI") >= 0 && 
+                symbol.name.indexOf("RegisterNatives") >= 0 && 
+                symbol.name.indexOf("CheckJNI") < 0) {
             addrRegisterNatives = symbol.address;
             console.log("RegisterNatives is at ", symbol.address, symbol.name);
         }
@@ -44,4 +43,4 @@ function hook_libart() {
     }
 }
 
-setImmediate(hook_libart);
+setImmediate(hook_RegisterNatives);

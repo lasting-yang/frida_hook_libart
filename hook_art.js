@@ -1,10 +1,15 @@
-
-var ishook_libart = false;
+/*
+GetFieldID is at  0xe39b87c5 _ZN3art3JNI10GetFieldIDEP7_JNIEnvP7_jclassPKcS6_
+GetMethodID is at  0xe39a1a19 _ZN3art3JNI11GetMethodIDEP7_JNIEnvP7_jclassPKcS6_
+NewStringUTF is at  0xe39cff25 _ZN3art3JNI12NewStringUTFEP7_JNIEnvPKc
+RegisterNatives is at  0xe39e08fd _ZN3art3JNI15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi
+GetStaticFieldID is at  0xe39c9635 _ZN3art3JNI16GetStaticFieldIDEP7_JNIEnvP7_jclassPKcS6_
+GetStaticMethodID is at  0xe39be0ed _ZN3art3JNI17GetStaticMethodIDEP7_JNIEnvP7_jclassPKcS6_
+GetStringUTFChars is at  0xe39d06e5 _ZN3art3JNI17GetStringUTFCharsEP7_JNIEnvP8_jstringPh
+FindClass is at  0xe399ae5d _ZN3art3JNI9FindClassEP7_JNIEnvPKc
+*/  
 
 function hook_libart() {
-    if (ishook_libart === true) {
-        return;
-    }
     var symbols = Module.enumerateSymbolsSync("libart.so");
     var addrGetStringUTFChars = null;
     var addrNewStringUTF = null;
@@ -14,54 +19,43 @@ function hook_libart() {
     var addrGetFieldID = null;
     var addrGetStaticFieldID = null;
     var addrRegisterNatives = null;
-    var addrAllocObject = null;
-    var addrCallObjectMethod = null;
-    var addrGetObjectClass = null;
-    var addrReleaseStringUTFChars = null;
     for (var i = 0; i < symbols.length; i++) {
         var symbol = symbols[i];
-        if (symbol.name == "_ZN3art3JNI17GetStringUTFCharsEP7_JNIEnvP8_jstringPh") {
-            addrGetStringUTFChars = symbol.address;
-            console.log("GetStringUTFChars is at ", symbol.address, symbol.name);
-        } else if (symbol.name == "_ZN3art3JNI12NewStringUTFEP7_JNIEnvPKc") {
-            addrNewStringUTF = symbol.address;
-            console.log("NewStringUTF is at ", symbol.address, symbol.name);
-        } else if (symbol.name == "_ZN3art3JNI9FindClassEP7_JNIEnvPKc") {
-            addrFindClass = symbol.address;
-            console.log("FindClass is at ", symbol.address, symbol.name);
-        } else if (symbol.name == "_ZN3art3JNI11GetMethodIDEP7_JNIEnvP7_jclassPKcS6_") {
-            addrGetMethodID = symbol.address;
-            console.log("GetMethodID is at ", symbol.address, symbol.name);
-        } else if (symbol.name == "_ZN3art3JNI17GetStaticMethodIDEP7_JNIEnvP7_jclassPKcS6_") {
-            addrGetStaticMethodID = symbol.address;
-            console.log("GetStaticMethodID is at ", symbol.address, symbol.name);
-        } else if (symbol.name == "_ZN3art3JNI10GetFieldIDEP7_JNIEnvP7_jclassPKcS6_") {
-            addrGetFieldID = symbol.address;
-            console.log("GetFieldID is at ", symbol.address, symbol.name);
-        } else if (symbol.name == "_ZN3art3JNI16GetStaticFieldIDEP7_JNIEnvP7_jclassPKcS6_") {
-            addrGetStaticFieldID = symbol.address;
-            console.log("GetStaticFieldID is at ", symbol.address, symbol.name);
-        } else if (symbol.name == "_ZN3art3JNI15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi") {
-            addrRegisterNatives = symbol.address;
-            console.log("RegisterNatives is at ", symbol.address, symbol.name);
-        } else if (symbol.name.indexOf("_ZN3art3JNI11AllocObjectEP7_JNIEnvP7_jclass") >= 0) {
-            addrAllocObject = symbol.address;
-            console.log("AllocObject is at ", symbol.address, symbol.name);
-        }  else if (symbol.name.indexOf("_ZN3art3JNI16CallObjectMethodEP7_JNIEnvP8_jobjectP10_jmethodIDz") >= 0) {
-            addrCallObjectMethod = symbol.address;
-            console.log("CallObjectMethod is at ", symbol.address, symbol.name);
-        } else if (symbol.name.indexOf("_ZN3art3JNI14GetObjectClassEP7_JNIEnvP8_jobject") >= 0) {
-            addrGetObjectClass = symbol.address;
-            console.log("GetObjectClass is at ", symbol.address, symbol.name);
-        } else if (symbol.name.indexOf("_ZN3art3JNI21ReleaseStringUTFCharsEP7_JNIEnvP8_jstringPKc") >= 0) {
-            addrReleaseStringUTFChars = symbol.address;
-            console.log("ReleaseStringUTFChars is at ", symbol.address, symbol.name);
+        if (symbol.name.indexOf("art") >= 0 &&
+            symbol.name.indexOf("JNI") >= 0 &&
+            symbol.name.indexOf("CheckJNI") < 0
+        ) {
+            if (symbol.name.indexOf("GetStringUTFChars") >= 0) {
+                addrGetStringUTFChars = symbol.address;
+                console.log("GetStringUTFChars is at ", symbol.address, symbol.name);
+            } else if (symbol.name.indexOf("NewStringUTF") >= 0) {
+                addrNewStringUTF = symbol.address;
+                console.log("NewStringUTF is at ", symbol.address, symbol.name);
+            } else if (symbol.name.indexOf("FindClass") >= 0) {
+                addrFindClass = symbol.address;
+                console.log("FindClass is at ", symbol.address, symbol.name);
+            } else if (symbol.name.indexOf("GetMethodID") >= 0) {
+                addrGetMethodID = symbol.address;
+                console.log("GetMethodID is at ", symbol.address, symbol.name);
+            } else if (symbol.name.indexOf("GetStaticMethodID") >= 0) {
+                addrGetStaticMethodID = symbol.address;
+                console.log("GetStaticMethodID is at ", symbol.address, symbol.name);
+            } else if (symbol.name.indexOf("GetFieldID") >= 0) {
+                addrGetFieldID = symbol.address;
+                console.log("GetFieldID is at ", symbol.address, symbol.name);
+            } else if (symbol.name.indexOf("GetStaticFieldID") >= 0) {
+                addrGetStaticFieldID = symbol.address;
+                console.log("GetStaticFieldID is at ", symbol.address, symbol.name);
+            } else if (symbol.name.indexOf("RegisterNatives") >= 0) {
+                addrRegisterNatives = symbol.address;
+                console.log("RegisterNatives is at ", symbol.address, symbol.name);
+            }
         }
     }
 
     if (addrGetStringUTFChars != null) {
         Interceptor.attach(addrGetStringUTFChars, {
-            onEnter: function (args) { },
+            onEnter: function (args) {},
             onLeave: function (retval) {
                 if (retval != null) {
                     var bytes = Memory.readCString(retval);
@@ -78,7 +72,7 @@ function hook_libart() {
                     console.log("[NewStringUTF] bytes:" + string);
                 }
             },
-            onLeave: function (retval) { }
+            onLeave: function (retval) {}
         });
     }
     if (addrFindClass != null) {
@@ -89,7 +83,7 @@ function hook_libart() {
                     console.log("[FindClass] name:" + name);
                 }
             },
-            onLeave: function (retval) { }
+            onLeave: function (retval) {}
         });
     }
     if (addrGetMethodID != null) {
@@ -106,7 +100,7 @@ function hook_libart() {
 
                 }
             },
-            onLeave: function (retval) { }
+            onLeave: function (retval) {}
         });
     }
     if (addrGetStaticMethodID != null) {
@@ -123,7 +117,7 @@ function hook_libart() {
 
                 }
             },
-            onLeave: function (retval) { }
+            onLeave: function (retval) {}
         });
     }
     if (addrGetFieldID != null) {
@@ -140,7 +134,7 @@ function hook_libart() {
 
                 }
             },
-            onLeave: function (retval) { }
+            onLeave: function (retval) {}
         });
     }
     if (addrGetStaticFieldID != null) {
@@ -157,7 +151,7 @@ function hook_libart() {
 
                 }
             },
-            onLeave: function (retval) { }
+            onLeave: function (retval) {}
         });
     }
 
@@ -167,25 +161,7 @@ function hook_libart() {
                 console.log("[RegisterNatives] method_count:", args[3]);
                 var env = args[0];
                 var java_class = args[1];
-                
-                var funcAllocObject = new NativeFunction(addrAllocObject, "pointer", ["pointer", "pointer"]);
-                var funcGetMethodID = new NativeFunction(addrGetMethodID, "pointer", ["pointer", "pointer", "pointer", "pointer"]);
-                var funcCallObjectMethod = new NativeFunction(addrCallObjectMethod, "pointer", ["pointer", "pointer", "pointer"]);
-                var funcGetObjectClass = new NativeFunction(addrGetObjectClass, "pointer", ["pointer", "pointer"]);
-                var funcGetStringUTFChars = new NativeFunction(addrGetStringUTFChars, "pointer", ["pointer", "pointer", "pointer"]);
-                var funcReleaseStringUTFChars = new NativeFunction(addrReleaseStringUTFChars, "void", ["pointer", "pointer", "pointer"]);
-
-                var clz_obj = funcAllocObject(env, java_class);
-                var mid_getClass = funcGetMethodID(env, java_class, Memory.allocUtf8String("getClass"), Memory.allocUtf8String("()Ljava/lang/Class;"));
-                var clz_obj2 = funcCallObjectMethod(env, clz_obj, mid_getClass);
-                var cls = funcGetObjectClass(env, clz_obj2);
-                var mid_getName = funcGetMethodID(env, cls, Memory.allocUtf8String("getName"), Memory.allocUtf8String("()Ljava/lang/String;"));
-                var name_jstring = funcCallObjectMethod(env, clz_obj2, mid_getName);
-                var name_pchar = funcGetStringUTFChars(env, name_jstring, ptr(0));
-                var class_name = ptr(name_pchar).readCString();
-                funcReleaseStringUTFChars(env, name_jstring, name_pchar);
-
-                //console.log(class_name);
+                var class_name = Java.vm.tryGetEnv().getClassName(java_class);
 
                 var methods_ptr = ptr(args[2]);
 
@@ -202,38 +178,10 @@ function hook_libart() {
 
                 }
             },
-            onLeave: function (retval) { }
+            onLeave: function (retval) {}
         });
     }
-
-    ishook_libart = true;
 }
 
-hook_libart();
+setImmediate(hook_libart);
 
-/*
-
-.text:00297024 ; art::JNI::GetStringUTFChars(_JNIEnv *, _jstring *, unsigned char *)
-.text:00297024 _ZN3art3JNI17GetStringUTFCharsEP7_JNIEnvP8_jstringPh
-
-.text:0027D960 ; art::JNI::NewStringUTF(_JNIEnv *, char const*)
-.text:0027D960 _ZN3art3JNI12NewStringUTFEP7_JNIEnvPKc
-
-.text:0029D238 ; art::JNI::FindClass(_JNIEnv *, char const*)
-.text:0029D238 _ZN3art3JNI9FindClassEP7_JNIEnvPKc
-
-.text:00286B14 ; art::JNI::GetMethodID(_JNIEnv *, _jclass *, char const*, char const*)
-.text:00286B14 _ZN3art3JNI11GetMethodIDEP7_JNIEnvP7_jclassPKcS6_
-
-.text:0028EC20 ; art::JNI::GetStaticMethodID(_JNIEnv *, _jclass *, char const*, char const*)
-.text:0028EC20 _ZN3art3JNI17GetStaticMethodIDEP7_JNIEnvP7_jclassPKcS6_
-
-.text:0028A7CC ; art::JNI::GetFieldID(_JNIEnv *, _jclass *, char const*, char const*)
-.text:0028A7CC _ZN3art3JNI10GetFieldIDEP7_JNIEnvP7_jclassPKcS6_
-
-.text:002889B0 ; art::JNI::GetStaticFieldID(_JNIEnv *, _jclass *, char const*, char const*)
-.text:002889B0 _ZN3art3JNI16GetStaticFieldIDEP7_JNIEnvP7_jclassPKcS6_
-
-.text:002B14E8 ; art::JNI::RegisterNatives(_JNIEnv *, _jclass *, JNINativeMethod const*, int)
-.text:002B14E8 _ZN3art3JNI15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi
-*/
