@@ -53,31 +53,16 @@ frida -U --no-pause -f package_name -l hook_RegisterNatives.js
 
 ## 3 hook_artmethod
 
-### 3.1 init libext first time
-
 ```text
-adb push lib/libext64.so /data/local/tmp/libext64.so
-adb push lib/libext.so /data/local/tmp/libext.so
-adb shell su -c "cp /data/local/tmp/libext64.so /data/app/libext64.so"
-adb shell su -c "cp /data/local/tmp/libext.so /data/app/libext.so"
-adb shell su -c "chown 1000.1000 /data/app/libext*.so"
-adb shell su -c "chmod 777 /data/app/libext*.so"
-adb shell su -c "ls -al /data/app/libext*"
+
+frida -U --no-pause -f package_name -l hook_artmethod.js -o hook_artmethod.log
 ```
 
-### 3.2 use hook_artmethod.js
-
-```text
-frida -U --no-pause -f package_name -l hook_artmethod.js
-or
-frida -U --no-pause -f package_name -l hook_artmethod.js > hook_artmethod.log
-```
-
-### 3.3 show PrettyMethod
+### 3.1 show PrettyMethod
 
 ```text
      ____
-    / _  |   Frida 12.8.0 - A world-class dynamic instrumentation toolkit
+    / _  |   Frida 14.2.18 - A world-class dynamic instrumentation toolkit
    | (_| |
     > _  |   Commands:
    /_/ |_|       help      -> Displays the help system
