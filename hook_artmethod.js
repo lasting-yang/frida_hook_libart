@@ -37,7 +37,7 @@ function prettyMethod(method_id, withSignature) {
     return result.disposeToString();
 }
 
-function hook_dlopen(module_name , fun ) {
+function hook_dlopen(module_name, fun) {
     var android_dlopen_ext = Module.findExportByName(null, "android_dlopen_ext");
 
     if (android_dlopen_ext) {
@@ -108,7 +108,9 @@ function hook_native() {
             onEnter: function (args) {
                 var method_name = prettyMethod(args[0], 0);
                 if (!(method_name.indexOf("java.") == 0 || method_name.indexOf("android.") == 0)) {
-                    console.log("ArtMethod Invoke:", method_name);
+                    console.log("ArtMethod Invoke:" + method_name + '  called from:\n' +
+                        Thread.backtrace(this.context, Backtracer.ACCURATE)
+                            .map(DebugSymbol.fromAddress).join('\n') + '\n');
                 }
             }
         });
