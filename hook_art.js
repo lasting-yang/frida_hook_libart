@@ -58,7 +58,7 @@ function hook_libart() {
     var addrGetFieldID = null;
     var addrGetStaticFieldID = null;
     var addrRegisterNatives = null;
-    var so_name = "libxxx";      //TODO 这里写需要查看的so
+    var so_name = "lib";      //TODO 这里写需要过滤的so
 
     for (var i = 0; i < symbols.length; i++) {
         var symbol = symbols[i];
