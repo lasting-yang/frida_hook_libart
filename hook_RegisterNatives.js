@@ -1,5 +1,5 @@
 
-function hook_RegisterNatives() {
+function find_RegisterNatives(params) {
     var symbols = Module.enumerateSymbolsSync("libart.so");
     var addrRegisterNatives = null;
     for (var i = 0; i < symbols.length; i++) {
@@ -12,8 +12,13 @@ function hook_RegisterNatives() {
                 symbol.name.indexOf("CheckJNI") < 0) {
             addrRegisterNatives = symbol.address;
             console.log("RegisterNatives is at ", symbol.address, symbol.name);
+            hook_RegisterNatives(addrRegisterNatives)
         }
     }
+
+}
+
+function hook_RegisterNatives(addrRegisterNatives) {
 
     if (addrRegisterNatives != null) {
         Interceptor.attach(addrRegisterNatives, {
@@ -43,4 +48,4 @@ function hook_RegisterNatives() {
     }
 }
 
-setImmediate(hook_RegisterNatives);
+setImmediate(find_RegisterNatives);
