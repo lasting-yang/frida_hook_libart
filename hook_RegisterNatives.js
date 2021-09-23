@@ -40,7 +40,7 @@ function hook_RegisterNatives(addrRegisterNatives) {
                     var name = Memory.readCString(name_ptr);
                     var sig = Memory.readCString(sig_ptr);
                     var find_module = Process.findModuleByAddress(fnPtr_ptr);
-                    console.log("[RegisterNatives] java_class:", class_name, "name:", name, "sig:", sig, "fnPtr:", fnPtr_ptr, "module_name:", find_module.name, "module_base:", find_module.base, "offset:", ptr(fnPtr_ptr).sub(find_module.base));
+                    console.log("[RegisterNatives] java_class:", class_name, "name:", name, "sig:", sig, "fnPtr:", fnPtr_ptr,  " fnOffset:", ptr(fnPtr_ptr).sub(find_module.base), " callee:", DebugSymbol.fromAddress(this.returnAddress));
 
                 }
             }
