@@ -32,23 +32,32 @@ frida -U --no-pause -f package_name -l hook_RegisterNatives.js
 [RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: getJavaScriptContext sig: ()J fnPtr: 0x9c9e509d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x5409d
 [RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: getJSCallInvokerHolder sig: ()Lcom/facebook/react/turbomodule/core/JSCallInvokerHolderImpl; fnPtr: 0x9c9e519d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x5419d
 [RegisterNatives] java_class: com.facebook.react.bridge.CatalystInstanceImpl name: jniHandleMemoryPressure sig: (I)V fnPtr: 0x9c9e539d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x5439d
-[RegisterNatives] method_count: 0x1
-[RegisterNatives] java_class: com.facebook.react.bridge.queue.NativeRunnable name: run sig: ()V fnPtr: 0x9c9e0935 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x4f935
-[RegisterNatives] method_count: 0x1
-[RegisterNatives] java_class: com.facebook.react.bridge.CxxModuleWrapperBase name: getName sig: ()Ljava/lang/String; fnPtr: 0x9ca00e49 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6fe49
-[RegisterNatives] method_count: 0x1
-[RegisterNatives] java_class: com.facebook.react.bridge.CxxModuleWrapper name: makeDsoNative sig: (Ljava/lang/String;Ljava/lang/String;)Lcom/facebook/react/bridge/CxxModuleWrapper; fnPtr: 0x9ca010f9 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x700f9
-[RegisterNatives] method_count: 0x1
-[RegisterNatives] java_class: com.facebook.react.bridge.CxxCallbackImpl name: nativeInvoke sig: (Lcom/facebook/react/bridge/NativeArray;)V fnPtr: 0x9ca013bd module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x703bd
-[RegisterNatives] method_count: 0x1
-[RegisterNatives] java_class: com.facebook.react.bridge.NativeArray name: toString sig: ()Ljava/lang/String; fnPtr: 0x9c9fec1d module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6dc1d
-[RegisterNatives] method_count: 0x3
-[RegisterNatives] java_class: com.facebook.react.bridge.NativeDeltaClient name: initHybrid sig: ()Lcom/facebook/jni/HybridData; fnPtr: 0x9c9ffcfd module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6ecfd
-[RegisterNatives] java_class: com.facebook.react.bridge.NativeDeltaClient name: processDelta sig: (Ljava/nio/channels/ReadableByteChannel;)V fnPtr: 0x9c9ffeed module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6eeed
-[RegisterNatives] java_class: com.facebook.react.bridge.NativeDeltaClient name: reset sig: ()V fnPtr: 0x9c9fffc5 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x6efc5
-[RegisterNatives] method_count: 0x2
-[RegisterNatives] java_class: com.facebook.react.bridge.ReadableNativeArray name: importArray sig: ()[Ljava/lang/Object; fnPtr: 0x9ca03641 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x72641
-[RegisterNatives] java_class: com.facebook.react.bridge.ReadableNativeArray name: importTypeArray sig: ()[Ljava/lang/Object; fnPtr: 0x9ca03b01 module_name: libreactnativejni.so module_base: 0x9c991000 offset: 0x72b01
+```
+
+### 2.2 lookup RegisterNative method
+Sometimes you don't want to use spawn to start the App, you just want to view the methods registered using RegisterNatives in a class,
+
+at this time you can use the lookup_RegisterNative_method function
+
+If you think there is a problem with fnPtr, please modify the entry_point_from_quick_compiled_code_name_array in fuzzy_search_data_offset
+
+```text
+frida -UF -l hook_RegisterNatives.js
+```
+```
+RegisterNatives is at  0x754e71704c _ZN3art3JNIILb0EE15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi
+RegisterNatives is at  0x754e7200b0 _ZN3art3JNIILb1EE15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi
+
+[Pixel 6::App ] -> lookup_RegisterNative_method("com.tencent.mmkv.MMKV")
+
+fnPtr='0x74a18223f0 libmmkv.so!0x193f0' method='private static native boolean com.tencent.mmkv.MMKV.checkProcessMode(long)'
+fnPtr='0x74a18223f0 libmmkv.so!0x193f0' method='private static native boolean com.tencent.mmkv.MMKV.checkProcessMode(long)'
+fnPtr='0x74a1821e9c libmmkv.so!0x18e9c' method='private native boolean com.tencent.mmkv.MMKV.containsKey(long,java.lang.String)'
+fnPtr='0x74a181f21c libmmkv.so!0x1621c' method='private native boolean com.tencent.mmkv.MMKV.containsKey(long,java.lang.String)'
+fnPtr='0x74a1821f9c libmmkv.so!0x18f9c' method='private native long com.tencent.mmkv.MMKV.count(long)'
+fnPtr='0x74a181f21c libmmkv.so!0x1621c' method='private native long com.tencent.mmkv.MMKV.count(long)'
+fnPtr='0x74a1822228 libmmkv.so!0x19228' method='private static native long com.tencent.mmkv.MMKV.createNB(int)'
+fnPtr='0x74a182096c libmmkv.so!0x1796c' method='private native boolean com.tencent.mmkv.MMKV.decodeBool(long,java.lang.String,boolean)'
 ```
 
 ## 3 hook_artmethod
@@ -86,19 +95,6 @@ boolean android.os.Binder.execTransact(int, long, long, int)
 void java.lang.ref.FinalizerReference.add(java.lang.Object)
 void java.lang.ref.FinalizerReference.add(java.lang.Object)
 void java.lang.ref.FinalizerReference.add(java.lang.Object)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
-android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
 android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
 android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
 android.os.BinderProxy android.os.BinderProxy.getInstance(long, long)
