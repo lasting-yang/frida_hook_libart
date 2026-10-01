@@ -84,7 +84,13 @@ function hook_dlopen(module_name, fun) {
 
 
 function hook_native() {
+    if (hook_native.installed) {
+        return;
+    }
     var module_libart = Process.findModuleByName("libart.so");
+    if (module_libart == null) {
+        return;
+    }
     var symbols = module_libart.enumerateSymbols();
     var ArtMethod_Invoke = null;
     for (var i = 0; i < symbols.length; i++) {
@@ -114,6 +120,7 @@ function hook_native() {
                 }
             }
         });
+        hook_native.installed = true;
     }
 }
 
